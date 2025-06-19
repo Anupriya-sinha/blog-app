@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     const fetchBlogs = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4001/api/blogs/all-blogs",
+          "https://https://blog-app-yt-mtvk.onrender.com/api/blogs/all-blogs",
           { withCredentials: true }
         );
         console.log(data);
@@ -67,3 +67,4 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
