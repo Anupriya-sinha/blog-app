@@ -1,0 +1,96 @@
+export const deleteBlog = async (req, res) => {
+  const {id}=req.params;
+  const blog=await Blog.findById(id);
+  if(!blog){
+    return res.status(400).json({message:"Blog not found"})
+  }
+
+await blog.deleteOne();
+res.status(200).json({message:"Blog deleted successfully"});
+};
+
+
+
+
+process.env.FRONTEND_URL,
+
+
+
+
+
+import { User } from "../models/user.model.js";
+import jwt from "jsonwebtoken";
+
+//Authentications
+export const isAuthenticated = async(req,res,next) => {
+    try {
+        const token=req.cookies.jwt;
+        console.log("Middleware :", token);
+        if (!token) {
+            return res.status(401).json({ error: "User not authicated" });
+        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        const user = await User.findById(decoded.userId);
+        if(!user){
+            return res.status(401).json({ error: "User not found" });
+        }
+        req.user = user;
+        next();
+    } catch (error) {
+        console.log("Error occuring in Authentication: " + error)
+        return res.status(401).json({error: "User not authenticated"})
+    }
+}
+
+
+//Autorization
+export const isAdmin = (...roles) => {
+    return (req,res,next) =>{
+        if(!roles.includes(req.user.role)){
+            return res.status(403).json({error: `User with given role ${req.user.role} not allowed`});
+        }
+        next();
+    }
+}
+
+
+
+import React from "react";
+import { useAuth } from "../context/AuthProvider";
+import { Link } from "react-router-dom";
+import { AiOutlineMenu } from "react-icons/ai";
+import { IoCloseSharp } from "react-icons/io5";
+import { useState } from "react";
+
+function Navbar() {
+  const { user, blogs } =useAuth();
+  const[show,setShow]=useState(false)
+  console.log(blogs);
+  return <>
+  <nav className=" shadow-lg px-4 py-2">
+    <div className="flex items-center justify-between container mx-auto">
+      <div className="font-semibold text-xl">
+        chilli<span className="text-blue-500">Blog</span>
+      </div>
+      {/*Desktop */}
+      <div>
+        <ul className="flex space-x-6">
+          <Link to ="/" className="hover:text-blue-500">HOME</Link>
+          <Link to ="/blogs" className="hover:text-blue-500">BLOGS</Link>
+          <Link to ="/creators" className="hover:text-blue-500">CREATORS</Link>
+          <Link to ="/about" className="hover:text-blue-500">ABOUT</Link>
+          <Link to ="/contact" className="hover:text-blue-500">CONTACT</Link>
+        </ul>
+        <div className="md:hidden"onClick={()=> setShow(!show)}>{show?<IoCloseSharp size={24}/>: <AiOutlineMenu size={24}/> }</div>
+      </div>
+      <div className="hidden md:flex space-x-2">
+        <Link to="/dashboard" className="bg-blue-600 text-white font-semibold hover:bg-blue-800 duration-300 px-4 py-2 rounded-md">DASHBOARD</Link>
+        <Link to="/login" className="bg-red-600 text-white font-semibold hover:bg-red-800 duration-300 px-4 py-2 rounded">LOGIN</Link>
+      </div>
+    </div>
+    {/* mobile navbar */}
+    </nav>
+    </>
+}
+
+export default Navbar;
