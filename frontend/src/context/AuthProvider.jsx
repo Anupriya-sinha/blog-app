@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         console.log(token);
         if (token) {
           const { data } = await axios.get(
-            "http://localhost:4001/api/users/my-profile",
+            "ttps://https://blog-app-yt-mtvk.onrender.com/api/users/all-my-profile",
             {
               withCredentials: true,
               headers: {
