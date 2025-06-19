@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         console.log(token);
         if (token) {
           const { data } = await axios.get(
-            "ttps://https://blog-app-yt-mtvk.onrender.com/api/users/all-my-profile",
+            "https://blog-app-yt-mtvk.onrender.com/api/users/all-my-profile",
             {
               withCredentials: true,
               headers: {
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     const fetchBlogs = async () => {
       try {
         const { data } = await axios.get(
-          "https://https://blog-app-yt-mtvk.onrender.com/api/blogs/all-blogs",
+          "https://blog-app-yt-mtvk.onrender.com/api/blogs/all-blogs",
           { withCredentials: true }
         );
         console.log(data);
