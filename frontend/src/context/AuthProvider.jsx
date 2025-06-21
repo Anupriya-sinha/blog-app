@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         console.log(token);
         if (token) {
           const { data } = await axios.get(
-            "https://blog-app-yt-mtvk.onrender.com/api/users/all-my-profile",
+            "https://blog-app-yt-mtvk.onrender.com/api/users/my-profile",
             {
               withCredentials: true,
               headers: {
@@ -67,4 +67,5 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
 
