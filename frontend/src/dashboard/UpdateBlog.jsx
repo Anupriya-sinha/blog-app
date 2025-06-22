@@ -30,7 +30,7 @@ function UpdateBlog() {
     const fetchBlog = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:4001/api/blogs/single-blog/${id}`,
+          `https://blog-app-yt-mtvk.onrender.com/api/blogs/single-blog/${id}`,
 
           {
             withCredentials: true,
@@ -62,7 +62,7 @@ function UpdateBlog() {
     formData.append("blogImage", blogImage);
     try {
       const { data } = await axios.put(
-        `http://localhost:4001/api/blogs/update/${id}`,
+        `https://blog-app-yt-mtvk.onrender.com/api/blogs/update/${id}`,
         formData,
         {
           withCredentials: true,
