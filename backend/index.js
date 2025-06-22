@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ['http://localhost:5173','https://blog-app-jet-psi.vercel.app'],
+    origin: ['http://localhost:5173','https://blog-app-jet-psi.vercel.app','https://blog-app-git-main-anupriya-sinhas-projects.vercel.app'],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
