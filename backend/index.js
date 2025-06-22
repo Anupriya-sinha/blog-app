@@ -4,45 +4,52 @@ import mongoose from "mongoose";
 import fileUpload from "express-fileupload";
 import { v2 as cloudinary } from "cloudinary";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+
 import userRoute from "./routes/user.route.js";
 import blogRoute from "./routes/blog.route.js";
 
-import cors from "cors";
-const app = express();
-dotenv.config();
 
+dotenv.config();
+const app = express();
 const port = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URI;
 
-//middleware
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://blog-app-jet-psi.vercel.app",
+  "https://blog-app-git-main-anupriya-sinhas-projects.vercel.app",
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+app.options("*", cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: ['http://localhost:5173','https://blog-app-jet-psi.vercel.app','https://blog-app-git-main-anupriya-sinhas-projects.vercel.app'],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
-);
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
-app.use(
-  fileUpload({
-    useTempFiles: true,
-    tempFileDir: "/tmp/",
-  })
-);
-
-// DB Code
+// MongoDB Connection
 try {
-  mongoose.connect(MONGO_URL);
-  console.log("Conntected to MongoDB");
+  await mongoose.connect(MONGO_URL);
+  console.log("✅ Connected to MongoDB");
 } catch (error) {
-  console.log(error);
+  console.error("❌ MongoDB connection failed:", error);
 }
 
-// defining routes
+// Routes
 app.use("/api/users", userRoute);
 app.use("/api/blogs", blogRoute);
+
+
 // Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
